@@ -35,7 +35,7 @@ def start_handler(message):
 
 @bot.message_handler(commands=['help'])
 def start_handler(message):
-    '''действия при вызове команды /help'''
+'''действия при вызове команды /help'''
     mess = f'<b>/add</b> - добавляет фразу\n<b>/del</b> - удаляет фразу\n<b>/all_phrases</b> - показывает все фразы в каталоге\n<b>/all_course</b> - покажет текущие курсы валют'
     bot.send_message(message.chat.id, mess, parse_mode='html')
 
@@ -142,7 +142,6 @@ def check_out_boys():
 
 
 class Clipboard:
-
     def __init__(self):
         self.course_lari = 0
         self.course_dollar = 0
