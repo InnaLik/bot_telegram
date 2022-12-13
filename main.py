@@ -200,6 +200,7 @@ all_course_class = Clipboard()
 # schedule.every().monday.at('17:00').do(check_out_boys)
 # schedule.every(1).minutes.do(check_out_boys)
 schedule.every(1).minutes.do(all_course_class.get_all_course)
+#изменение
 def bots():
     try:
         while True:
