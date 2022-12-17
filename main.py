@@ -35,7 +35,7 @@ def start_handler(message):
 
 @bot.message_handler(commands=['help'])
 def start_handler(message):
-'''действия при вызове команды /help'''
+    '''действия при вызове команды /help'''
     mess = f'<b>/add</b> - добавляет фразу\n<b>/del</b> - удаляет фразу\n<b>/all_phrases</b> - показывает все фразы в каталоге\n<b>/all_course</b> - покажет текущие курсы валют'
     bot.send_message(message.chat.id, mess, parse_mode='html')
 
@@ -165,8 +165,7 @@ class Clipboard:
         response1 = requests.get('https://ru.calculat.io/other/kurs-aliexpress?ysclid=l6njm9dlir783105784')
         try:
             e = response1.text.index('Курс Али сейчас:')
-            raise ValueError
-            # return response1.text[e + 17:e + 22]
+            return response1.text[e + 17:e + 22]
         except ValueError:
             return self.course_ali
 
@@ -204,7 +203,7 @@ schedule.every(1).minutes.do(all_course_class.get_all_course)
 def bots():
     try:
         while True:
-            bot.infinity_polling()
+            bot.infinity_polling(timeout=10, long_polling_timeout = 5)
     except:
         logging.exception('бот упал')
 
