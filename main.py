@@ -11,6 +11,8 @@ from datetime import datetime
 import schedule
 from threading import Thread
 import time
+import pandas as pd
+from bs4 import BeautifulSoup
 
 
 #запись лога от уровня INFO и выше в файл py_log.log + записывается время
@@ -160,14 +162,14 @@ class Clipboard:
         rates = ExchangeRates(datetime.now())
         return str(rates['USD'].value)[0:5]
 
+
     def get_ali(self):
         '''для получения курса али'''
-        response1 = requests.get('https://ru.calculat.io/other/kurs-aliexpress?ysclid=l6njm9dlir783105784')
-        try:
-            e = response1.text.index('Курс Али сейчас:')
-            return response1.text[e + 17:e + 22]
-        except ValueError:
-            return self.course_ali
+        tables = pd.read_html('https://helpix.ru/currency/')
+        for df in tables:
+            if 'Aliexpress.ru' in df.columns:
+                return df.loc[0, 'Aliexpress.ru']
+
 
     def get_euro(self):
         '''для получения курса евро'''
@@ -222,3 +224,8 @@ variable = Thread(target=bots)
 variable2 = Thread(target=sch)
 variable.start()
 variable2.start()
+
+
+
+
+
