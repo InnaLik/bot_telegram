@@ -128,6 +128,15 @@ def start_handler(message):
         s1.execute(f'DELETE FROM NAME WHERE name = ?', (e,))
         bot.send_message(message.chat.id, f'слово "{e}" удалено из исключений и его можно добавлять в таблицу bad_words')
 
+@bot.message_handler(commands=['taboo_all'])
+def start_handler(message):
+    '''действия при вызове комканды taboo_all - покажет список всех исключений'''
+    with sqlite3.connect('bot_nesibintelk.db') as s:
+        s1 = s.cursor()
+        s1.execute(f'Select name from NAME')
+        data = '\n'.join([i[0] for i in s1.fetchall()])
+        bot.send_message(message.chat.id, data)
+
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
     try:
