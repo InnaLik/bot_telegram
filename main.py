@@ -38,7 +38,8 @@ def start_handler(message):
 @bot.message_handler(commands=['help'])
 def start_handler(message):
     '''действия при вызове команды /help'''
-    mess = f'<b>/add</b> - добавляет фразу\n<b>/del</b> - удаляет фразу\n<b>/all_phrases</b> - показывает все фразы в каталоге\n<b>/all_course</b> - покажет текущие курсы валют'
+    mess = f'<b>/add</b> - добавляет фразу\n<b>/del</b> - удаляет фразу\n<b>/all_phrases</b> - показывает все фразы в каталоге\n<b>/all_course</b> - покажет текущие курсы валют' \
+           f'\n<b>/del_bad</b> - удалит слово\n<b>/add_bad</b> - добавит слово'
     bot.send_message(message.chat.id, mess, parse_mode='html')
 
 @bot.message_handler(commands=['all_phrases'])
@@ -78,6 +79,54 @@ def start_handler(message):
         else:
             bot.send_message(message.chat.id, f'фразы не найдено')
 
+@bot.message_handler(commands=['add_bad'])
+def start_handler(message):
+    '''действия при вызове команды /add_bad - добавление слова в таблицу'''
+    with sqlite3.connect('bot_nesibintelk.db') as s:
+        s1 = s.cursor()
+        e = ' '.join(message.text.split()[1:])
+        s1.execute(f'SELECT count(name) from NAME where name = ?', (e,))
+        data = s1.fetchone()
+        if data == (0,):
+            s1.execute(f'INSERT INTO bad_words (word) VALUES (?)', (e,))
+            bot.send_message(message.chat.id, f'слово "{e}" добавлено')
+        else:
+            bot.send_message(message.chat.id, f'Такие слова не добавляю')
+
+
+@bot.message_handler(commands=['del_bad'])
+def start_handler(message):
+    '''действия при вызове команды /del_bad - удаление слова из таблицы bad_words'''
+    with sqlite3.connect('bot_nesibintelk.db') as s:
+        s1 = s.cursor()
+        e = ' '.join(message.text.split()[1:])
+        s1.execute(f'SELECT count(id) from bad_words where word = ?', (e, ))
+        data = s1.fetchone()
+        if data != (0,):
+            s1.execute(f'DELETE FROM bad_words WHERE word = ?', (e,))
+            bot.send_message(message.chat.id, f'слово "{e}" удалено')
+        else:
+            bot.send_message(message.chat.id, f'Такого слова нет')
+
+
+@bot.message_handler(commands=['taboo'])
+def start_handler(message):
+    '''дeйствия при вызове команды taboo - добавляет слова в таблицу NAME, чтобы эти слова потом нельзя было
+    добавить в таблицу bad_words'''
+    with sqlite3.connect('bot_nesibintelk.db') as s:
+        s1 = s.cursor()
+        e = ' '.join(message.text.split()[1:])
+        s1.execute(f'INSERT INTO NAME (name) VALUES (?)', (e,))
+        bot.send_message(message.chat.id, f'слово "{e}" добавлено в список исключений, его нельзя будет добавить в таблицу bad_words')
+
+@bot.message_handler(commands=['taboo_del'])
+def start_handler(message):
+    '''дeйствия при вызове команды taboo_del - удаляет слово из таблицы NAME'''
+    with sqlite3.connect('bot_nesibintelk.db') as s:
+        s1 = s.cursor()
+        e = ' '.join(message.text.split()[1:])
+        s1.execute(f'DELETE FROM NAME WHERE name = ?', (e,))
+        bot.send_message(message.chat.id, f'слово "{e}" удалено из исключений и его можно добавлять в таблицу bad_words')
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
