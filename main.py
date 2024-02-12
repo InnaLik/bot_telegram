@@ -52,7 +52,6 @@ def start_handler(message):
         bot.send_message(message.chat.id, data)
 
 
-
 @bot.message_handler(commands=['add'])
 def start_handler(message):
     '''действия при вызове команды /add'''
@@ -119,6 +118,7 @@ def start_handler(message):
         s1.execute(f'INSERT INTO NAME (name) VALUES (?)', (e,))
         bot.send_message(message.chat.id, f'слово "{e}" добавлено в список исключений, его нельзя будет добавить в таблицу bad_words')
 
+
 @bot.message_handler(commands=['taboo_del'])
 def start_handler(message):
     '''дeйствия при вызове команды taboo_del - удаляет слово из таблицы NAME'''
@@ -128,6 +128,7 @@ def start_handler(message):
         s1.execute(f'DELETE FROM NAME WHERE name = ?', (e,))
         bot.send_message(message.chat.id, f'слово "{e}" удалено из исключений и его можно добавлять в таблицу bad_words')
 
+
 @bot.message_handler(commands=['taboo_all'])
 def start_handler(message):
     '''действия при вызове комканды taboo_all - покажет список всех исключений'''
@@ -136,6 +137,7 @@ def start_handler(message):
         s1.execute(f'Select name from NAME')
         data = '\n'.join([i[0] for i in s1.fetchall()])
         bot.send_message(message.chat.id, data)
+
 
 @bot.message_handler(content_types=['text'])
 def bot_message(message):
@@ -160,13 +162,16 @@ def bot_message(message):
     except:
         logging.exception('текст')
 
+
 def send_course():
     bot.send_message(chat_id=-736597313, text=all_course_class.get())
     bot.send_message(chat_id=-1001214772818, text=all_course_class.get())
 
+
 def check_apartment():
     if datetime.now().day == 19:
         bot.send_message(chat_id=-736597313, text='Подать данные по коммуналке')
+
 
 def birthday():
     dates = str(datetime.now().day).rjust(2, '0') + '.' + str(datetime.now().month).rjust(2, '0')
@@ -176,16 +181,15 @@ def birthday():
     b_day = s1.fetchone()
     if b_day:
         if b_day[0] != 'Инна':
-            bot.send_message(chat_id=-1001214772818, text=f'Сегодня свой день рождение празднует {b_day[0]}! Давайте все вместе поздравим его!')
+            bot.send_message(chat_id=, text=f'Сегодня свой день рождение празднует {b_day[0]}! Давайте все вместе поздравим его!')
         else:
-            bot.send_message(chat_id=-736597313, text='Инна, с днем рождения')
-
-
+            bot.send_message(chat_id=, text='Инна, с днем рождения')
 
 
 def greeting():
-    bot.send_message(chat_id=-736597313, text='Доброе утро и хорошего дня!')
-    bot.send_message(chat_id=-1001214772818, text='Доброе утро, 36.6')
+    bot.send_message(chat_id=, text='Доброе утро и хорошего дня!')
+    bot.send_message(chat_id=, text='Доброе утро, 36.6')
+
 
 def error():
     bot.send_message(chat_id=472546754, text='ловим ошибку')
@@ -197,8 +201,7 @@ def check_out_boys():
         s1.execute('Select nick, count from boys ORDER BY 2 DESC' )
         all = s1.fetchall()
         text = '\n'.join([f'{i[0]} : {i[1]}' for i in all])
-        bot.send_message(chat_id=472546754, text = f'Общая статистика: \n{text}')
-
+        bot.send_message(chat_id=, text = f'Общая статистика: \n{text}')
 
 
 class Clipboard:
@@ -208,6 +211,7 @@ class Clipboard:
         self.course_euro = 0
         self.course_ali = 0
 
+  
     def lari(self):
         '''для получения курса лари'''
         e = requests.get('https://pokur.su/gel/rub/1/')
@@ -215,6 +219,7 @@ class Clipboard:
         index_lari = d.index('грузинского лари в рублях на сегодня составляет')
         return d[index_lari + 48:index_lari + 53]
 
+  
     def get_dollar(self):
         '''для получения курса доллара'''
         rates = ExchangeRates(datetime.now())
@@ -241,6 +246,7 @@ class Clipboard:
         self.course_euro = self.get_euro()
         self.course_ali = self.get_ali()
 
+  
     def get(self):
         return f'курс лари: {self.course_lari}\n' \
                f'курс доллара: {self.course_dollar}\n'\
@@ -249,7 +255,6 @@ class Clipboard:
 
 
 all_course_class = Clipboard()
-
 
 #каждый день в определенное время запускаются задания
 # schedule.every().day.at("08:00").do(birthday)
