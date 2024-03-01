@@ -257,13 +257,13 @@ class Clipboard:
 all_course_class = Clipboard()
 
 #каждый день в определенное время запускаются задания
-# schedule.every().day.at("08:00").do(birthday)
-# schedule.every().day.at('09:00').do(greeting)
-# schedule.every().day.at('11:10').do(send_course)
-# schedule.every().day.at('12:00').do(check_apartment)
-# schedule.every().monday.at('17:00').do(check_out_boys)
-# schedule.every(1).minutes.do(check_out_boys)
-schedule.every(1).minutes.do(all_course_class.get_all_course)
+schedule.every().day.at("08:00").do(birthday)
+schedule.every().day.at('09:00').do(greeting)
+schedule.every().day.at('11:10').do(send_course)
+schedule.every().day.at('12:00').do(check_apartment)
+schedule.every().monday.at('17:00').do(check_out_boys)
+schedule.every(1).minutes.do(check_out_boys)
+
 
 def bots():
     try:
