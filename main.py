@@ -164,13 +164,13 @@ def bot_message(message):
 
 
 def send_course():
-    bot.send_message(chat_id=-736597313, text=all_course_class.get())
-    bot.send_message(chat_id=-1001214772818, text=all_course_class.get())
+    bot.send_message(chat_id=, text=all_course_class.get())
+    bot.send_message(chat_id=, text=all_course_class.get())
 
 
 def check_apartment():
     if datetime.now().day == 19:
-        bot.send_message(chat_id=-736597313, text='Подать данные по коммуналке')
+        bot.send_message(chat_id=, text='Подать данные по коммуналке')
 
 
 def birthday():
@@ -190,9 +190,6 @@ def greeting():
     bot.send_message(chat_id=, text='Доброе утро и хорошего дня!')
     bot.send_message(chat_id=, text='Доброе утро, 36.6')
 
-
-def error():
-    bot.send_message(chat_id=472546754, text='ловим ошибку')
 
 
 def check_out_boys():
